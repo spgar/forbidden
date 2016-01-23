@@ -33,7 +33,8 @@ module.exports = Forbidden =
     if @modalPanel.isVisible()
       @modalPanel.hide()
     else
-      words = atom.workspace.getActiveTextEditor().getText().split(/\s+/)
+      editorText = atom.workspace.getActiveTextEditor().getText()
+      words = editorText.split(/\W+/)
       splitForbiddenWords = atom.config.get('forbidden.forbiddenWords').split(/;/)
 
       matchingWords = (word for word in words when word in splitForbiddenWords)
