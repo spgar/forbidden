@@ -25,9 +25,15 @@ module.exports = Forbidden =
     forbiddenViewState: @forbiddenView.serialize()
 
   toggle: ->
-    console.log 'Forbidden was toggled!'
-
     if @modalPanel.isVisible()
       @modalPanel.hide()
     else
+      editor = atom.workspace.getActiveTextEditor()
+      words = editor.getText().split(/\s+/)
+
+      forbiddenWords = ['datum', 'moist', 'selfie']
+
+      matchingWords = (word for word in words when word in forbiddenWords)
+
+      @forbiddenView.setCount(matchingWords.length)
       @modalPanel.show()
