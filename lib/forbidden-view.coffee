@@ -11,6 +11,8 @@ class ForbiddenView
     message.classList.add('message')
     @element.appendChild(message)
 
+    @element.appendChild(document.createElement('div'))
+
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 
@@ -24,3 +26,7 @@ class ForbiddenView
   setCount: (count) ->
     displayText = "There are #{count} forbidden words."
     @element.children[0].textContent = displayText;
+
+  alertFromSave: ->
+    displayText = "Saved with forbidden words!"
+    @element.children[1].textContent = displayText;

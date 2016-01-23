@@ -21,6 +21,11 @@ module.exports = Forbidden =
     # Register command that toggles this view
     @subscriptions.add atom.commands.add 'atom-workspace', 'forbidden:toggle': => @toggle()
 
+    # Monitor saves for all of the text editor
+    @subscriptions.add atom.workspace.observeTextEditors (editor) =>
+      @subscriptions.add editor.getBuffer().onDidSave =>
+        @handleOnDidSave()
+
   deactivate: ->
     @modalPanel.destroy()
     @subscriptions.dispose()
@@ -29,15 +34,19 @@ module.exports = Forbidden =
   serialize: ->
     forbiddenViewState: @forbiddenView.serialize()
 
+  getMatchingForbiddenWords: ->
+    editorText = atom.workspace.getActiveTextEditor().getText()
+    words = editorText.split(/\W+/)
+    splitForbiddenWords = atom.config.get('forbidden.forbiddenWords').split(/;/)
+    matchingWords = (word for word in words when word in splitForbiddenWords)
+
   toggle: ->
     if @modalPanel.isVisible()
       @modalPanel.hide()
     else
-      editorText = atom.workspace.getActiveTextEditor().getText()
-      words = editorText.split(/\W+/)
-      splitForbiddenWords = atom.config.get('forbidden.forbiddenWords').split(/;/)
-
-      matchingWords = (word for word in words when word in splitForbiddenWords)
-
+      matchingWords = @getMatchingForbiddenWords()
       @forbiddenView.setCount(matchingWords.length)
       @modalPanel.show()
+
+  handleOnDidSave: ->
+    @forbiddenView.alertFromSave()
