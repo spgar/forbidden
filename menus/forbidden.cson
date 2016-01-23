@@ -2,7 +2,7 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Toggle forbidden'
+      'label': 'Toggle Forbidden'
       'command': 'forbidden:toggle'
     }
   ]
