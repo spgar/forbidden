@@ -2,6 +2,11 @@ ForbiddenView = require './forbidden-view'
 {CompositeDisposable} = require 'atom'
 
 module.exports = Forbidden =
+  config:
+    forbiddenWords:
+      type: 'string'
+      default: 'datum;moist;selfie'
+
   forbiddenView: null
   modalPanel: null
   subscriptions: null
@@ -28,12 +33,10 @@ module.exports = Forbidden =
     if @modalPanel.isVisible()
       @modalPanel.hide()
     else
-      editor = atom.workspace.getActiveTextEditor()
-      words = editor.getText().split(/\s+/)
+      words = atom.workspace.getActiveTextEditor().getText().split(/\s+/)
+      splitForbiddenWords = atom.config.get('forbidden.forbiddenWords').split(/;/)
 
-      forbiddenWords = ['datum', 'moist', 'selfie']
-
-      matchingWords = (word for word in words when word in forbiddenWords)
+      matchingWords = (word for word in words when word in splitForbiddenWords)
 
       @forbiddenView.setCount(matchingWords.length)
       @modalPanel.show()
