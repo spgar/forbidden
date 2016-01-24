@@ -6,7 +6,6 @@
   "keywords": [
   ],
   "activationCommands": {
-    "atom-workspace": "forbidden:toggle"
   },
   "repository": "https://github.com/spgar/forbidden",
   "license": "MIT",

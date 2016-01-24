@@ -8,12 +8,13 @@ module.exports = Forbidden =
       default: 'datum;moist;selfie'
 
   forbiddenView: null
-  modalPanel: null
+  countModalPanel: null
   subscriptions: null
 
   activate: (state) ->
     @forbiddenView = new ForbiddenView(state.forbiddenViewState)
-    @modalPanel = atom.workspace.addModalPanel(item: @forbiddenView.getElement(), visible: false)
+    @countModalPanel = atom.workspace.addModalPanel(item: @forbiddenView.getCountElement(), visible: false)
+    @alertModalPanel = atom.workspace.addModalPanel(item: @forbiddenView.getAlertElement(), visible: false)
 
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
@@ -27,7 +28,7 @@ module.exports = Forbidden =
         @handleOnDidSave()
 
   deactivate: ->
-    @modalPanel.destroy()
+    @countModalPanel.destroy()
     @subscriptions.dispose()
     @forbiddenView.destroy()
 
@@ -41,12 +42,15 @@ module.exports = Forbidden =
     matchingWords = (word for word in words when word in splitForbiddenWords)
 
   toggle: ->
-    if @modalPanel.isVisible()
-      @modalPanel.hide()
+    if @countModalPanel.isVisible()
+      @countModalPanel.hide()
     else
       matchingWords = @getMatchingForbiddenWords()
       @forbiddenView.setCount(matchingWords.length)
-      @modalPanel.show()
+      @countModalPanel.show()
 
   handleOnDidSave: ->
-    @forbiddenView.alertFromSave()
+    matchingWordCount = @getMatchingForbiddenWords().length
+    if not @alertModalPanel.isVisible() and matchingWordCount > 0
+      @forbiddenView.setAlertCount(matchingWordCount)
+      @alertModalPanel.show()

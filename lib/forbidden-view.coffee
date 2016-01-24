@@ -1,32 +1,34 @@
 module.exports =
 class ForbiddenView
   constructor: (serializedState) ->
-    # Create root element
-    @element = document.createElement('div')
-    @element.classList.add('forbidden')
+    # Create count report element
+    @countElement = document.createElement('div')
+    @countElement.classList.add('forbidden')
+    @countElement.appendChild(document.createElement('div'))
 
-    # Create message element
-    message = document.createElement('div')
-    message.textContent = "The Forbidden package is Alive! It's ALIVE!"
-    message.classList.add('message')
-    @element.appendChild(message)
-
-    @element.appendChild(document.createElement('div'))
+    # Create save alert element
+    @alertElement = document.createElement('div')
+    @alertElement.classList.add('forbidden')
+    @alertElement.appendChild(document.createElement('div'))
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 
   # Tear down any state and detach
   destroy: ->
-    @element.remove()
+    @countElement.remove()
+    @alertElement.remove()
 
-  getElement: ->
-    @element
+  getCountElement: ->
+    @countElement
+
+  getAlertElement: ->
+    @alertElement
 
   setCount: (count) ->
     displayText = "There are #{count} forbidden words."
-    @element.children[0].textContent = displayText;
+    @countElement.children[0].textContent = displayText
 
-  alertFromSave: ->
-    displayText = "Saved with forbidden words!"
-    @element.children[1].textContent = displayText;
+  setAlertCount: (count) ->
+    displayText = "You just saved with #{count} forbidden words!"
+    @alertElement.children[0].textContent = displayText
