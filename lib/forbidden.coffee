@@ -54,3 +54,6 @@ module.exports = Forbidden =
     if not @alertModalPanel.isVisible() and matchingWordCount > 0
       @forbiddenView.setAlertCount(matchingWordCount)
       @alertModalPanel.show()
+      setTimeout (=>
+        @alertModalPanel.hide()
+      ), 3000
