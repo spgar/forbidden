@@ -8,7 +8,7 @@ class ForbiddenView
 
     # Create save alert element
     @alertElement = document.createElement('div')
-    @alertElement.classList.add('forbidden')
+    @alertElement.classList.add('forbiddenAlert')
     @alertElement.appendChild(document.createElement('div'))
 
   # Returns an object that can be retrieved when package is activated
